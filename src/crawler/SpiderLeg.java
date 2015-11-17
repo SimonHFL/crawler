@@ -1,5 +1,6 @@
 package crawler;
 
+import Infrastructure.Filesystem;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,16 +25,17 @@ public class SpiderLeg {
         {
             Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
             Document htmlDocument = connection.get();
-            this.htmlDocument = htmlDocument;
 
-            System.out.println("Received web page at " + url);
+            this.htmlDocument = Jsoup.parse(htmlDocument.toString());
 
             Elements linksOnPage = htmlDocument.select("a[href]");
-            System.out.println("Found (" + linksOnPage.size() + ") links");
+
             for(Element link : linksOnPage)
             {
                 this.links.add(link.absUrl("href"));
             }
+
+            saveToFile(url);
         }
         catch(IOException ioe)
         {
@@ -43,11 +45,16 @@ public class SpiderLeg {
 
     }
 
-    public boolean searchForWord(String searchWord)
-    {
-        System.out.println("Searching for the word " + searchWord + "...");
-        String bodyText = this.htmlDocument.body().text();
-        return bodyText.toLowerCase().contains(searchWord.toLowerCase());
+    private void saveToFile(String url) throws IOException {
+
+        String[] words = htmlDocument.text().split(" ");
+
+        Filesystem.writeToFileByName("crawl", url + "\n", true);
+
+        for (String word: words)
+        {
+            Filesystem.writeToFileByName("crawl", word + "\n", true);
+        }
     }
 
     public List<String> getLinks()
