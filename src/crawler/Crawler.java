@@ -41,6 +41,7 @@ public class Crawler {
 
             Scraper scraper = new Scraper();
             scraper.scrape(currentUrl);
+
             pagesToVisit.addAll(scraper.getLinks());
             pagesVisited.add(trimUrl(currentUrl));
         }
@@ -63,16 +64,12 @@ public class Crawler {
     {
         String nextUrl;
 
-        nextUrl = pagesToVisit.remove(0);
-
-        while( ! urlIsValid(nextUrl) && ! pagesToVisit.isEmpty() )
-        {
+        do{
             nextUrl = pagesToVisit.remove(0);
         }
+        while( ! urlIsValid(nextUrl) && ! pagesToVisit.isEmpty() );
 
-        if (pagesVisited.contains(nextUrl)) return null;
-
-        return nextUrl;
+        return pagesVisited.contains(nextUrl) ? null : nextUrl;
     }
 
     /**
