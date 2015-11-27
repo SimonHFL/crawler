@@ -2,17 +2,14 @@ package crawler;
 
 import Infrastructure.Filesystem;
 
-import java.io.IOException;
-
 public class Main {
 
-
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) {
         Filesystem.deleteFile("scrape");
-        Crawler crawler = new Crawler();
-        crawler.crawl("http://ekstrabladet.dk");
 
+        String url = "http://dr.dk";
+        Crawler crawler = new Crawler(url);
+        crawler.crawl();
     }
 
 }

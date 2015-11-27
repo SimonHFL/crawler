@@ -19,6 +19,13 @@ public class Scraper {
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Public  Methods
+    |--------------------------------------------------------------------------
+    |
+    */
+
     public void scrape(String url)
     {
         try
@@ -45,21 +52,28 @@ public class Scraper {
 
     }
 
+    public List<String> getLinks()
+    {
+        return this.links;
+    }
+
+    /*
+	|--------------------------------------------------------------------------
+	| Private Methods
+	|--------------------------------------------------------------------------
+	|
+	*/
+
     private void saveToFile(String url) throws IOException {
 
         String[] words = htmlDocument.text().split(" ");
 
-        Filesystem.writeToFileByName("scrape", url + "\n", true);
+        Filesystem.writeToFileByName("scrape", "*PAGE:" + url + "\n", true);
 
         for (String word: words)
         {
             Filesystem.writeToFileByName("scrape", word + "\n", true);
         }
-    }
-
-    public List<String> getLinks()
-    {
-        return this.links;
     }
 
 }
